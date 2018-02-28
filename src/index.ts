@@ -57,6 +57,7 @@ function parseData(data: string, delimiter: string) {
   const CHR_QUOTE = 34; // "
   const CHR_LF = 10; // \n
   const CHR_CR = 13; // \r
+  let endfield = new RegExp(`[${delimiter}\n\r]`, 'g');
   enum STATE {
     ESCAPED,
     ESCAPED_FIRST_QUOTE,
@@ -130,6 +131,14 @@ function parseData(data: string, delimiter: string) {
       break;
 
     case UNESCAPED:
+      // skip ahead to either the next delimiter or next CR or LF
+      endfield.lastIndex = i;
+      let match = endfield.exec(data);
+      if (match) {
+        i = match.index;
+        char = data[i].charCodeAt(0);
+      }
+
       switch (char) {
       case CHR_DELIMITER:
         state = NEW_FIELD;
