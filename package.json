@@ -1,0 +1,28 @@
+{
+  "name": "benchtest",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib && rimraf built",
+    "build:src": "tsc",
+    "build": "npm run build:src && webpack --mode development"
+  },
+  "dependencies": {
+    "@types/benchmark": "^1.0.31",
+    "@types/d3-dsv": "^1.0.31",
+    "@types/lodash": "^4.14.104",
+    "@types/papaparse": "^4.1.33",
+    "benchmark": "^2.1.4",
+    "d3-dsv": "^1.0.8",
+    "lodash": "^4.17.5",
+    "papaparse": "^4.3.7",
+    "rimraf": "^2.6.2"
+  },
+  "devDependencies": {
+    "typescript": "^2.7.2",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9"
+  }
+}
