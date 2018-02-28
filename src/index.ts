@@ -68,11 +68,14 @@ function parseData(data: string, delimiter: string) {
   const { ESCAPED, ESCAPED_FIRST_QUOTE, UNESCAPED, NEW_FIELD, NEW_ROW, CR } = STATE;
   let state = NEW_ROW;
   let offsets = [];
-  for (let i = 0; i < len; i++) {
+  let i = -1;
+  let char;
+  while (i < len - 2) {
+    i++;
     if (state === NEW_ROW) {
       offsets.push(i);
     }
-    let char = data[i].charCodeAt(0);
+    char = data[i].charCodeAt(0);
     switch (state) {
     case NEW_ROW:
     case NEW_FIELD:
@@ -93,6 +96,10 @@ function parseData(data: string, delimiter: string) {
       break;
 
     case ESCAPED:
+      // skip ahead until we see another quote
+      i = data.indexOf('"', i);
+      if (i < 0) {throw 'mismatched quote';}
+      char = data[i].charCodeAt(0);
       switch (char) {
       case CHR_QUOTE:
         state = ESCAPED_FIRST_QUOTE;
